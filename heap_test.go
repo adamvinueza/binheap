@@ -3,7 +3,7 @@ package binheap_test
 import (
 	"testing"
 
-	"github.com/adamvinueza/binheap"
+	. "github.com/adamvinueza/binheap"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -133,7 +133,8 @@ func hasCompleteTree(b *BinaryHeap) bool {
 
 func heapPropertyHolds(b *BinaryHeap) bool {
 	for _, n := range b.Items() {
-		if b.IsRoot(n) {
+		// the root node has no parent
+		if b.Parent(n) == nil {
 			continue
 		}
 		if !b.OrderingHolds(b.Parent(n), n) {

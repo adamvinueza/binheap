@@ -33,6 +33,42 @@ func NewBinaryHeap(items []Item, f OrderingFunc) *BinaryHeap {
 	return &b
 }
 
+// Left returns the left node in this BinaryHeap.
+func (b *BinaryHeap) Left(n Item) Item {
+	return b.child(n, 0) // 2i
+}
+
+// Right returns the right node in this BinaryHeap.
+func (b *BinaryHeap) Right(n Item) Item {
+	return b.child(n, 1) // 2i + 1
+}
+
+// Parent returns the parent of the specified item.
+func (b *BinaryHeap) Parent(n Item) Item {
+	if idx, found := b.index(n); found {
+		return b.Heap[idx/2]
+	}
+	return nil
+}
+
+// ExtractFirst removes and returns the first Item from this BinaryHeap.
+func (b *BinaryHeap) ExtractFirst() Item {
+	first := b.Heap[FirstIndex]
+	b.swap(first, b.Heap[b.Size])
+	b.Size--
+	b.heapify(FirstIndex)
+	return first
+}
+
+// Items returns this BinaryHeaps items, in order of its internal Heap slice.
+func (b *BinaryHeap) Items() []Item {
+	items := make([]Item, 0)
+	for i := 1; i <= b.Size; i++ {
+		items = append(items, b.Heap[i])
+	}
+	return items
+}
+
 // build takes a slice of heap Items and reorders them into a binary heap.
 func (b *BinaryHeap) build() {
 	b.Size = len(b.Heap) - 1
@@ -42,17 +78,20 @@ func (b *BinaryHeap) build() {
 	}
 }
 
-// ExtractFirst removes and returns the first Item from this BinaryHeap.
-func (b *BinaryHeap) ExtractFirst() Item {
-	first := b.peekFirst()
-	b.swap(first, b.Heap[b.Size])
-	b.Size--
-	b.heapify(FirstIndex)
-	return first
+func (b *BinaryHeap) child(n Item, inc int) Item {
+	if idx, found := b.index(n); found {
+		childIdx := idx*2 + inc
+		if childIdx < len(b.Heap) {
+			return b.Heap[childIdx]
+		}
+	}
+	return nil
 }
 
-func (b *BinaryHeap) peekFirst() Item {
-	return b.Heap[FirstIndex]
+// index returns the index of the item in this BinaryHeap's internal slice.
+func (b *BinaryHeap) index(n Item) (int, bool) {
+	idx, found := b.IndexMap[n]
+	return idx, found
 }
 
 func (b *BinaryHeap) swap(first Item, second Item) {
@@ -88,52 +127,4 @@ func (b *BinaryHeap) heapify(i int) {
 		b.swap(item, largest)
 		b.heapify(largestIdx)
 	}
-}
-
-// Left returns the left node in this BinaryHeap.
-func (b *BinaryHeap) Left(n Item) Item {
-	return b.child(n, 0) // 2i
-}
-
-// Right returns the right node in this BinaryHeap.
-func (b *BinaryHeap) Right(n Item) Item {
-	return b.child(n, 1) // 2i + 1
-}
-
-func (b *BinaryHeap) child(n Item, inc int) Item {
-	if idx, found := b.index(n); found {
-		childIdx := idx*2 + inc
-		if childIdx < len(b.Heap) {
-			return b.Heap[childIdx]
-		}
-	}
-	return nil
-}
-
-// index returns the index of the item in this BinaryHeap's internal slice.
-func (b *BinaryHeap) index(n Item) (int, bool) {
-	idx, found := b.IndexMap[n]
-	return idx, found
-}
-
-// Parent returns the parent of the specified item.
-func (b *BinaryHeap) Parent(n Item) Item {
-	if idx, found := b.index(n); found {
-		return b.Heap[idx/2]
-	}
-	return nil
-}
-
-// IsRoot returns true if the specified Item is at the root of this BinaryHeap.
-func (b *BinaryHeap) IsRoot(n Item) bool {
-	return b.Parent(n) == nil
-}
-
-// Items returns this BinaryHeaps items, in order of its internal Heap slice.
-func (b *BinaryHeap) Items() []Item {
-	items := make([]Item, 0)
-	for i := 1; i <= b.Size; i++ {
-		items = append(items, b.Heap[i])
-	}
-	return items
 }
