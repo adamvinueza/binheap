@@ -7,9 +7,13 @@ const FirstIndex = 1
 // OrderingFunc determines how items are ordered in a binary heap.
 type OrderingFunc func(i Item, j Item) bool
 
-// Item is the thing that goes into a binary heap.
+// Items go into a binary heap.
+//
+// Value() retrieves the value that can be compared in the binary heap's
+// ordering function. It is presumed that the ordering function knows which
+// types to expect.
 type Item interface {
-	Value() int
+	Value() interface{}
 }
 
 // BinaryHeap implements a binary heap.
@@ -23,8 +27,12 @@ type BinaryHeap struct {
 
 // NewBinaryHeap returns a BinaryHeap containing the specified items, inserted
 // using the specified OrderingFunc.
-func NewBinaryHeap(items []Item, f OrderingFunc) *BinaryHeap {
-	b := BinaryHeap{Heap: append([]Item{nil}, items...), OrderingHolds: f, IndexMap: make(map[Item]int)}
+func NewBinaryHeap(items []Item, fn OrderingFunc) *BinaryHeap {
+	b := BinaryHeap{
+		Heap:          append([]Item{nil}, items...),
+		OrderingHolds: fn,
+		IndexMap:      make(map[Item]int),
+	}
 	for i := 1; i < len(b.Heap); i++ {
 		item := b.Heap[i]
 		b.IndexMap[item] = i

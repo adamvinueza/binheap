@@ -17,7 +17,7 @@ func TestCompleteTreeNoChange(t *testing.T) {
 	}
 
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
-		return i.Value() <= j.Value()
+		return i.Value().(int) <= j.Value().(int)
 	})
 	assert.True(t, hasCompleteTree(b))
 }
@@ -32,7 +32,7 @@ func TestCompleteTreeChange(t *testing.T) {
 	}
 
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
-		return i.Value() <= j.Value()
+		return i.Value().(int) <= j.Value().(int)
 	})
 	assert.True(t, hasCompleteTree(b))
 }
@@ -46,7 +46,7 @@ func TestHeapProperty(t *testing.T) {
 		&numeric{value: 7},
 	}
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
-		return i.Value() <= j.Value()
+		return i.Value().(int) <= j.Value().(int)
 	})
 	assert.True(t, heapPropertyHolds(b))
 }
@@ -60,7 +60,7 @@ func TestExtractMax(t *testing.T) {
 		&numeric{value: 5},
 	}
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
-		return i.Value() >= j.Value()
+		return i.Value().(int) >= j.Value().(int)
 	})
 
 	for i := 7; i > 2; i-- {
@@ -80,7 +80,7 @@ func TestExtractMin(t *testing.T) {
 		&numeric{value: 7},
 	}
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
-		return i.Value() <= j.Value()
+		return i.Value().(int) <= j.Value().(int)
 	})
 
 	for i := 3; i < 8; i++ {
@@ -95,7 +95,7 @@ type numeric struct {
 	value int
 }
 
-func (n *numeric) Value() int {
+func (n *numeric) Value() interface{} {
 	return n.value
 }
 
