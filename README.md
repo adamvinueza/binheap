@@ -36,3 +36,23 @@ in the bunch. Then _i_ cannot to be lighter than _j_ if _i_ is _j_'s parent.
 
 These examples show it doesn't matter _what_ you're ordering or what particular
 order you care about--you can order those things using a binary heap.
+
+## Applications of binary heaps
+
+The examples above illustrated uses of a _priority queue_. A priority queue
+isn't a queue, precisely--queues are structures wherein the order of retrieval
+is identical to the order of insertion--although queues _are_ special cases of
+priority queues (the ordering relation would be _earlier insertion_). Priority
+queues are defined with an ordering relation, and their items can be retrieved
+in that order.
+
+As you may imagine, it's also possible to _sort_ using a binary heap. Create a
+binary heap whose ordering relation is the one you would use to sort the items,
+put the items into the heap, then extract them from the heap until it is empty;
+the result is a list of items in the proper order.
+
+## Efficiency of binary heaps
+
+Binary heaps are efficient data structures. Priority queues can be created in
+_O(n log n)_ time (on par with the most efficient sorting algorithms), and
+extracting the first item can be done in _O(log n)_ time.
