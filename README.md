@@ -31,5 +31,8 @@ Or suppose we're storing items from a grocery store so that the cheapest item is
 always retrieved first. Then if _i_ and _j_ are items in the heap and _i_ is the
 parent of _j_, then _i_ cannot be more expensive than _j_.
 
+Or perhaps you have color samples and you want to always get the darkest sample
+in the bunch. Then _i_ cannot to be lighter than _j_ if _i_ is _j_'s parent.
+
 These examples show it doesn't matter _what_ you're ordering or what particular
 order you care about--you can order those things using a binary heap.
