@@ -22,16 +22,15 @@ is the parent of _j_, _R(i, j)_.
 The second property is known as the _heap property_, and it's rather abstract,
 so a couple of examples may help make it clear.
 
-Suppose we're storing numbers in a binary heap and we want the numbers ordered
-so that when we want to pull numbers out, we always get the largest one. Then if
-_i_ and _j_ are stored in the heap and _i_ is the parent of _j_, _i_ cannot be
-less than _j_.
+Suppose we have a bunch of numbers and want to always pull out the largest
+number from the bunch. Then if _i_ and _j_ are stored in the heap and _i_ is the
+parent of _j_, _i_ cannot be less than _j_.
 
-Or suppose we're storing items from a grocery store so that the cheapest item is
-always retrieved first. Then if _i_ and _j_ are items in the heap and _i_ is the
-parent of _j_, then _i_ cannot be more expensive than _j_.
+Or suppose we have items from a grocery store and always want the cheapest item
+to be the first item available. Then if _i_ and _j_ are items in the heap and
+_i_ is the parent of _j_, then _i_ cannot be more expensive than _j_.
 
-Or perhaps you have color samples and you want to always get the darkest sample
+Or perhaps we have color samples and we want to always get the darkest sample
 in the bunch. Then _i_ cannot to be lighter than _j_ if _i_ is _j_'s parent.
 
 These examples show it doesn't matter _what_ you're ordering or what particular
@@ -56,3 +55,5 @@ the result is a list of items in the proper order.
 Binary heaps are efficient data structures. Priority queues can be created in
 _O(n log n)_ time (on par with the most efficient sorting algorithms), and
 extracting the first item can be done in _O(log n)_ time.
+
+## 
