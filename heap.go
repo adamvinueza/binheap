@@ -4,14 +4,10 @@ package binheap
 // when calculating parents and children.
 const FirstIndex = 1
 
-// OrderingFunc determines how items are ordered in a binary heap.
+// OrderingFunc determines how Items are ordered in a binary heap.
 type OrderingFunc func(i Item, j Item) bool
 
-// Items go into a binary heap.
-//
-// Value() retrieves the value that can be compared in the binary heap's
-// ordering function. It is presumed that the ordering function knows which
-// types to expect.
+// Item represents an element of a binary heap.
 type Item interface {
 	Value() interface{}
 }
@@ -53,8 +49,9 @@ func (b *BinaryHeap) Right(n Item) Item {
 
 // Parent returns the parent of the specified item.
 func (b *BinaryHeap) Parent(n Item) Item {
-	if idx, found := b.index(n); found {
-		return b.Heap[idx/2]
+	if idx, found := b.IndexMap[n]; found {
+		parentIdx := idx / 2
+		return b.Heap[parentIdx]
 	}
 	return nil
 }
@@ -87,52 +84,46 @@ func (b *BinaryHeap) build() {
 }
 
 func (b *BinaryHeap) child(n Item, inc int) Item {
-	if idx, found := b.index(n); found {
-		childIdx := idx*2 + inc
-		if childIdx < len(b.Heap) {
-			return b.Heap[childIdx]
-		}
+	childIdx := 2*b.IndexMap[n] + inc
+	if 0 < childIdx && childIdx <= b.Size {
+		return b.Heap[childIdx]
 	}
 	return nil
 }
 
-// index returns the index of the item in this BinaryHeap's internal slice.
-func (b *BinaryHeap) index(n Item) (int, bool) {
-	idx, found := b.IndexMap[n]
-	return idx, found
-}
-
 func (b *BinaryHeap) swap(first Item, second Item) {
 	// we assume the indexes work because this is an unexported function
-	firstIdx, _ := b.index(first)
-	secondIdx, _ := b.index(second)
+	firstIdx, _ := b.IndexMap[first]
+	secondIdx, _ := b.IndexMap[second]
 	b.Heap[firstIdx] = second
 	b.Heap[secondIdx] = first
 	b.IndexMap[first] = secondIdx
 	b.IndexMap[second] = firstIdx
 }
 
-// heapify rebuilds the internal heap slice.
 func (b *BinaryHeap) heapify(i int) {
 	item := b.Heap[i]
-	left := b.Left(item)
-	right := b.Right(item)
-	var largest Item = item
-	var largestIdx int
-	if idx, found := b.index(left); found {
-		if idx <= b.Size && b.OrderingHolds(left, item) {
-			largest = left
-			largestIdx = idx
+	var first Item = item
+	var firstIdx int
+	// if ordering holds between left and item, set left to first
+	if left := b.Left(item); left != nil {
+		leftIdx := b.IndexMap[left]
+		if b.OrderingHolds(left, item) {
+			first = left
+			firstIdx = leftIdx
 		}
 	}
-	if idx, found := b.index(right); found {
-		if idx <= b.Size && b.OrderingHolds(right, largest) {
-			largest = right
-			largestIdx = idx
+	// if ordering holds between right and first, set right to first
+	if right := b.Right(item); right != nil {
+		rightIdx := b.IndexMap[right]
+		if b.OrderingHolds(right, first) {
+			first = right
+			firstIdx = rightIdx
 		}
 	}
-	if largest != item {
-		b.swap(item, largest)
-		b.heapify(largestIdx)
+	if first != item {
+		b.swap(item, first)
+		// push the item down to its proper level
+		b.heapify(firstIdx)
 	}
 }

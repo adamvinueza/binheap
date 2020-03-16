@@ -133,7 +133,6 @@ func hasCompleteTree(b *BinaryHeap) bool {
 
 func heapPropertyHolds(b *BinaryHeap) bool {
 	for _, n := range b.Items() {
-		// the root node has no parent
 		if b.Parent(n) == nil {
 			continue
 		}
