@@ -1,4 +1,4 @@
-# Binary Heap
+# Explaining Data Structures: Binary Heap
 
 A treatment of binary heaps and their use in other data structures.
 
