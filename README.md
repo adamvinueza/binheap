@@ -55,5 +55,3 @@ the result is a list of items in the proper order.
 Binary heaps are efficient data structures. Priority queues can be created in
 _O(n log n)_ time (on par with the most efficient sorting algorithms), and
 extracting the first item can be done in _O(log n)_ time.
-
-## 

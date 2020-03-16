@@ -21,10 +21,12 @@ type BinaryHeap struct {
 	Size          int
 }
 
-// NewBinaryHeap returns a BinaryHeap containing the specified items, inserted
+// NewBinaryHeap returns a BinaryHeap containing the specified Items, built
 // using the specified OrderingFunc.
 func NewBinaryHeap(items []Item, fn OrderingFunc) *BinaryHeap {
 	b := BinaryHeap{
+		// To simplify traversal calculations, array implementations usually
+		// have indexing start at 1.
 		Heap:          append([]Item{nil}, items...),
 		OrderingHolds: fn,
 		IndexMap:      make(map[Item]int),
@@ -37,17 +39,19 @@ func NewBinaryHeap(items []Item, fn OrderingFunc) *BinaryHeap {
 	return &b
 }
 
-// Left returns the left node in this BinaryHeap.
+// Left returns the specified Item's left child in this BinaryHeap. Returns nil
+// if there is no left child.
 func (b *BinaryHeap) Left(n Item) Item {
 	return b.child(n, 0) // 2i
 }
 
-// Right returns the right node in this BinaryHeap.
+// Right returns the specified Item's right child in this BinaryHeap. Returns nil
+// if there is no right child.
 func (b *BinaryHeap) Right(n Item) Item {
 	return b.child(n, 1) // 2i + 1
 }
 
-// Parent returns the parent of the specified item.
+// Parent returns the parent of the specified Item.
 func (b *BinaryHeap) Parent(n Item) Item {
 	if idx, found := b.IndexMap[n]; found {
 		parentIdx := idx / 2
@@ -58,6 +62,9 @@ func (b *BinaryHeap) Parent(n Item) Item {
 
 // ExtractFirst removes and returns the first Item from this BinaryHeap.
 func (b *BinaryHeap) ExtractFirst() Item {
+	if b.Size == 0 {
+		return nil
+	}
 	first := b.Heap[FirstIndex]
 	b.swap(first, b.Heap[b.Size])
 	b.Size--
@@ -65,7 +72,7 @@ func (b *BinaryHeap) ExtractFirst() Item {
 	return first
 }
 
-// Items returns this BinaryHeaps items, in order of its internal Heap slice.
+// Items returns this BinaryHeap's Items, in order of its internal Heap slice.
 func (b *BinaryHeap) Items() []Item {
 	items := make([]Item, 0)
 	for i := 1; i <= b.Size; i++ {
