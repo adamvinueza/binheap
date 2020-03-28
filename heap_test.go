@@ -8,14 +8,7 @@ import (
 )
 
 func TestCompleteTreeNoChange(t *testing.T) {
-	items := []Item{
-		&numeric{value: 3},
-		&numeric{value: 4},
-		&numeric{value: 5},
-		&numeric{value: 6},
-		&numeric{value: 7},
-	}
-
+	items := numerics(3, 4, 5, 6, 7)
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
 		return i.Value().(int) <= j.Value().(int)
 	})
@@ -23,14 +16,7 @@ func TestCompleteTreeNoChange(t *testing.T) {
 }
 
 func TestCompleteTreeChange(t *testing.T) {
-	items := []Item{
-		&numeric{value: 6},
-		&numeric{value: 3},
-		&numeric{value: 5},
-		&numeric{value: 4},
-		&numeric{value: 7},
-	}
-
+	items := numerics(6, 3, 5, 4, 7)
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
 		return i.Value().(int) <= j.Value().(int)
 	})
@@ -38,13 +24,7 @@ func TestCompleteTreeChange(t *testing.T) {
 }
 
 func TestHeapProperty(t *testing.T) {
-	items := []Item{
-		&numeric{value: 6},
-		&numeric{value: 3},
-		&numeric{value: 5},
-		&numeric{value: 4},
-		&numeric{value: 7},
-	}
+	items := numerics(6, 3, 5, 4, 7)
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
 		return i.Value().(int) <= j.Value().(int)
 	})
@@ -52,13 +32,7 @@ func TestHeapProperty(t *testing.T) {
 }
 
 func TestExtractMax(t *testing.T) {
-	items := []Item{
-		&numeric{value: 4},
-		&numeric{value: 6},
-		&numeric{value: 3},
-		&numeric{value: 7},
-		&numeric{value: 5},
-	}
+	items := numerics(4, 6, 3, 7, 5)
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
 		return i.Value().(int) >= j.Value().(int)
 	})
@@ -72,13 +46,7 @@ func TestExtractMax(t *testing.T) {
 }
 
 func TestExtractMin(t *testing.T) {
-	items := []Item{
-		&numeric{value: 6},
-		&numeric{value: 3},
-		&numeric{value: 5},
-		&numeric{value: 4},
-		&numeric{value: 7},
-	}
+	items := numerics(6, 3, 5, 4, 7)
 	b := NewBinaryHeap(items, func(i Item, j Item) bool {
 		return i.Value().(int) <= j.Value().(int)
 	})
@@ -97,6 +65,14 @@ type numeric struct {
 
 func (n *numeric) Value() interface{} {
 	return n.value
+}
+
+func numerics(ii ...int) []Item {
+	nn := make([]Item, len(ii))
+	for i, v := range ii {
+		nn[i] = &numeric{value: v}
+	}
+	return nn
 }
 
 func hasCompleteTree(b *BinaryHeap) bool {
